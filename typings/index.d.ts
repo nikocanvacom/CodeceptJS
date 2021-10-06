@@ -1,5 +1,4 @@
 // Project: https://github.com/codeception/codeceptjs/
-/// <reference path="./types.d.ts" />
 /// <reference types="webdriverio" />
 /// <reference path="./Mocha.d.ts" />
 
