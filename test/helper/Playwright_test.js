@@ -832,6 +832,7 @@ describe('Playwright (remote browser) websocket', function () {
 
 describe('Playwright - BasicAuth', function () {
   this.timeout(35000);
+  this.retries(3);
 
   before(() => {
     global.codecept_dir = path.join(__dirname, '/../data');
@@ -869,7 +870,16 @@ describe('Playwright - BasicAuth', function () {
 
   describe('open page with provided basic auth', () => {
     it('should be authenticated ', async () => {
-      await I.amOnPage('/basic_auth');
+      const getTimeoutPromise = function (timeoutMs, taskName) {
+        let timer;
+        return [new Promise((done, reject) => {
+          timer = setTimeout(() => { reject(new Error(`Action ${taskName} was interrupted on step timeout ${timeoutMs}ms`)); }, timeoutMs || 2e9);
+        }), timer];
+      };
+
+      const [promise, timer] = getTimeoutPromise(5000, 'amOnPage');
+
+      await Promise.race([promise, I.amOnPage('/basic_auth')]).finally(() => clearTimeout(timer));
       await I.see('You entered admin as your password.');
     });
   });
