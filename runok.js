@@ -153,7 +153,8 @@ Our community prepared some valuable recipes for setting up CI systems with Code
       copy(`lib/helper/${file}`, `docs/build/${file}`);
       replaceInFile(`docs/build/${file}`, (cfg) => {
         for (const i in placeholders) {
-          cfg.replace(placeholders[i], templates[i]);
+          const template = templates[i] + (templates[i].includes('@return') ? '' : '\n@returns {Promise<void>} nothing\n');
+          cfg.replace(placeholders[i], template);
         }
         if (!forTypings) {
           cfg.replace(/CodeceptJS.LocatorOrString\?/g, '(string | object)?');
