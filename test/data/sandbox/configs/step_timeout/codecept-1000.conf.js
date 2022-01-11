@@ -10,6 +10,7 @@ exports.config = {
     stepTimeout: {
       enabled: true,
       timeout: 1,
+      overrideTimeLimitsInCode: true,
       noTimeoutSteps: [
         'wait*',
       ],
